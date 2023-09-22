@@ -1,46 +1,78 @@
 #include "shell.h"
-#include <ctype.h> // Include the header for isatty
 
-int interactive(info_t *info) {
-    return (isatty(STDIN_FILENO) && info->readfd <= 2);
+/**
+ * interactive - checks if the shell is in interactive mode
+ * @info: struct pointer containing shell information
+ *
+ * Return: 1 if in interactive mode, 0 otherwise
+ */
+int interactive(info_t *info)
+{
+	return (isatty(STDIN_FILENO) && info->readfd <= 2);
 }
 
-int is_delim(char d, char *delim) {
-    while (*delim) {
-        if (*delim++ == d) {
-            return 1;
-        }
-    }
-    return 0;
+/**
+ * is_delim - checks if a character is a delimiter
+ * @c: the character to check
+ * @delim: the delimiter string
+ *
+ * Return: 1 if it's a delimiter, 0 otherwise
+ */
+int is_delim(char c, char *delim)
+{
+	while (*delim)
+	{
+		if (*delim++ == c)
+			return (1);
+	}
+	return (0);
 }
 
-int _isalpha(int d) {
-    return isalpha(d); // Use the standard library isalpha function
+/**
+ * _isalpha - checks if a character is alphabetic
+ * @c: the character to check
+ *
+ * Return: 1 if c is alphabetic, 0 otherwise
+ */
+int _isalpha(int c)
+{
+	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
+		return (1);
+	else
+		return (0);
 }
 
-int _atoi(char *z) {
-    int i, sign = 1, flag = 0, output;
-    unsigned int result = 0;
+/**
+ * _atoi - converts a string to an integer
+ * @s: the string to be converted
+ *
+ * Return: 0 if no numbers in the string, converted number otherwise
+ */
+int _atoi(char *s)
+{
+	int i, sign = 1, flag = 0, output;
+	unsigned int result = 0;
 
-    for (i = 0; z[i] != '\0' && flag != 2; i++) {
-        if (z[i] == '-') {
-            sign *= -1;
-        }
+	for (i = 0; s[i] != '\0' && flag != 2; i++)
+	{
+		if (s[i] == '-')
+			sign *= -1;
 
-        if (isdigit(z[i])) { // Use isdigit to check for digits
-            flag = 1;
-            result *= 10;
-            result += (z[i] - '0');
-        } else if (flag == 1) {
-            flag = 2;
-        }
-    }
+		if (s[i] >= '0' && s[i] <= '9')
+		{
+			flag = 1;
+			result *= 10;
+			result += (s[i] - '0');
+		}
+		else if (flag == 1)
+			flag = 2;
+	}
 
-    if (sign == -1) {
-        output = -result;
-    } else {
-        output = result;
-    }
+	if (sign == -1)
+		output = -result;
+	else
+		output = result;
 
-    return output;
+	return (output);
 }
+
